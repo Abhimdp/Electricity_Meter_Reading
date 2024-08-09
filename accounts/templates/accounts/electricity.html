@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Electricity Meter Reading</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script>
+        function calculateUnits() {
+            var previousReading = parseInt(document.getElementById('id_previous_reading').value) || 0;
+            var currentReading = parseInt(document.getElementById('id_current_reading').value) || 0;
+            var units = currentReading - previousReading;
+            document.getElementById('electricity_units').innerText = units;
+        }
+    </script>
+</head>
+<body>
+    <h2>Electricity Meter Reading</h2>
+    <form method="post" action="{% url 'save_reading' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div>
+            <label>Electricity units:</label>
+            <span id="electricity_units">0</span>
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+    <script>
+        document.getElementById('id_previous_reading').addEventListener('input', calculateUnits);
+        document.getElementById('id_current_reading').addEventListener('input', calculateUnits);
+    </script>
+</body>
+</html>
